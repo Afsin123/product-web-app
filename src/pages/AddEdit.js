@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import { useHistory, useParams } from "react-router-dom";
 import './AddEdit.css';
-//import { storage, db } from '../config/Config';
+import { storage, db } from '../firebase';
 // import fireDb from "../firebase";
 // import { toast } from "react-toastify";
 
@@ -36,6 +36,27 @@ const AddEdit = () => {
 
    const addProduct = (e) => {
       e.preventDefault();
+      //console.log(productName, productPrice, productImage)
+      const uploadTask = storage.ref(`product-images/${productImage.name}`).put(productImage);
+      uploadTask.on('state_changed', snapshot => {
+         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+         console.log(progress);
+     }, err => setError(err.message)
+         , () => {
+             storage.ref('product-images').child(productImage.name).getDownloadURL().then(url => {
+                 db.collection('Products').add({
+                     ProductName: productName,
+                     ProductPrice: Number(productPrice),
+                     ProductImg: url
+                 }).then(() => {
+                     setProductName('');
+                     setProductPrice(0)
+                     setProductImage('');
+                     setError('');
+                     document.getElementById('file').value = '';
+                 }).catch(err => setError(err.message))
+             })
+         })
    }
 
    // const [state, setState] = useState(initialState);
@@ -112,7 +133,7 @@ const AddEdit = () => {
             <br />
             <label htmlFor="productimage"> Product Image</label>
             <br />
-            <input type="file" className='form-control' onChange={productImageHandler} />
+            <input type="file" className='form-control' onChange={productImageHandler} id="file" />
             <br />
             <br />
             <button className='btn btn-success btn-md mybtn'> ADD </button>
