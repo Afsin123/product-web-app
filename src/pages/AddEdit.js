@@ -13,48 +13,65 @@ import { storage, db } from '../firebase';
 //    category: "",
 
 // }
-const AddEdit = () => {
+const AddProducts = () => {
 
-   const [productName, setProductName] = useState('');
-   const [productPrice, setProductPrice] = useState(0);
-   const [productImage, setProductImage] = useState(null)
-   const [error, setError] = useState('')
+   const [title, setTitle] = useState('');
+   const [description, setDescription] = useState('');
+   const [price, setPrice] = useState('');
+   const [image, setImage] = useState(null);
 
-   const types = ['image/png', 'image/jpeg', 'image/jpg']
+   const [imageError, setImageError] = useState('');
+   const[successMsg, setSuccessMsg] = useState('')
+   const [uploadError, setUploadError] = useState('')
+
+   const types = ['image/png', 'image/PNG', 'image/jpeg', 'image/jpg'];  
 
    const productImageHandler = (e) => {
-      let selectedFile = e.target.files[0];
-      if (selectedFile && types.includes(selectedFile.type)) {
-         setProductImage(selectedFile);
-         setError('');
+      let selectedFile = e.target.files[0]; 
+      if (selectedFile) {
+         if (selectedFile && types.includes(selectedFile.type)) {
+            setImage(selectedFile);
+            setImageError('');
+         }
+         else {
+            setImage(null)
+            setImageError('Please select a valid image type or jpeg')
+         }
+      } else {
+         console.log('Please select your file')
       }
-      else {
-         setProductImage(null)
-         setError('Please select a valid image type or jpeg')
-      }
+     
    }
 
    const addProduct = (e) => {
       e.preventDefault();
-      //console.log(productName, productPrice, productImage)
-      const uploadTask = storage.ref(`product-images/${productImage.name}`).put(productImage);
+      console.log(title, description, price);
+      console.log(image);
+      const uploadTask = storage.ref(`product-images/${image.name}`).put(image);
       uploadTask.on('state_changed', snapshot => {
          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
          console.log(progress);
-     }, err => setError(err.message)
+     }, error => setUploadError(error.message)
          , () => {
-             storage.ref('product-images').child(productImage.name).getDownloadURL().then(url => {
+             storage.ref('product-images').child(image.name).getDownloadURL().then(url => {
                  db.collection('Products').add({
-                     ProductName: productName,
-                     ProductPrice: Number(productPrice),
-                     ProductImg: url
+                    title,
+                    description,
+                    price: Number(price),
+                    url
+
                  }).then(() => {
-                     setProductName('');
-                     setProductPrice(0)
-                     setProductImage('');
-                     setError('');
-                     document.getElementById('file').value = '';
-                 }).catch(err => setError(err.message))
+                    setSuccessMsg('Product successfully added')
+                    setTitle('');
+                    setDescription('');
+                    setPrice('')
+                    document.getElementById('file').value = '';
+                    setImageError('');
+                    setUploadError('');
+                    setTimeout(() => {
+                       setSuccessMsg('');
+                    }, 3000)
+                 }).catch(error => setUploadError(error.message))
              })
          })
    }
@@ -117,30 +134,43 @@ const AddEdit = () => {
          <br />
          <h2> ADD PRODUCTS </h2>
          <hr />
+         <br />
+         {successMsg &&  <> 
+            <div className="success-msg">{successMsg}</div>
+            <br /><br />
+               </> }
          <form autoComplete='off' className='form-group' onSubmit={addProduct} >
-            <label htmlFor="productname"> Product Name</label>
-            <br />
+            <label> Title </label>
             <input type="text" className='form-control' required
-            onChange={(e)=> setProductName(e.target.value)} value={productName}
-            />    
-            
-            <label htmlFor="productprice"> Product Price</label>
+            onChange={(e)=> setTitle(e.target.value)} value={title}/>    
+          <br /> 
+            <label> Product Description</label>
+            <input type="text" className='form-control' required
+            onChange={(e)=> setDescription(e.target.value)} value={description} /> 
             <br />
+            
+            <label> Product Price</label>
             <input type="number" className='form-control' required
-               onChange={(e)=> setProductPrice(e.target.value)} value={productPrice} 
+               onChange={(e)=> setPrice(e.target.value)} value={price} />  
+            <br />
+            <label> Upload Product Image</label>
+            <input type="file"  id="file" className='form-control' onChange={productImageHandler} />
+            <br /><br />
+            {imageError && <> 
+               <br /><br />
+               <div className="error-msg">{ imageError}</div>
+               </> }
             
-            />  
-            <br />
-            <label htmlFor="productimage"> Product Image</label>
-            <br />
-            <input type="file" className='form-control' onChange={productImageHandler} id="file" />
-            <br />
-            <br />
-            <button className='btn btn-success btn-md mybtn'> ADD </button>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <button type= "submit" className='btn btn-success btn-md' > SUBMIT </button>
+            </div>
          </form>
-         {error && <span> {error}</span>}
+         {uploadError && <> 
+            <br /><br />
+               <div className="error-msg">{ uploadError}</div> </>  }
      </div>
    )
 }
 
-export default AddEdit
+export default  AddProducts
+      
