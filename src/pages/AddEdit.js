@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-// import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import './AddEdit.css';
-import { storage, db } from '../firebase';
+import { fireDb, storage, db } from '../firebase';
 // import fireDb from "../firebase";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 
 // const initialState= {
-//    productname: "",
+//    title: "",
 //    price: "",
 //    description: "",
-//    category: "",
-
+   
 // }
 const AddProducts = () => {
 
@@ -20,14 +19,17 @@ const AddProducts = () => {
    const [price, setPrice] = useState('');
    const [image, setImage] = useState(null);
 
+   // const [state, setState] = useState(initialState);
+
    const [imageError, setImageError] = useState('');
-   const[successMsg, setSuccessMsg] = useState('')
+   const [successMsg, setSuccessMsg] = useState('')
    const [uploadError, setUploadError] = useState('')
 
-   const types = ['image/png', 'image/PNG', 'image/jpeg', 'image/jpg'];  
+   const types = ['image/png', 'image/PNG', 'image/jpeg', 'image/jpg'];
+   // const { title, price, description} = state;
 
    const productImageHandler = (e) => {
-      let selectedFile = e.target.files[0]; 
+      let selectedFile = e.target.files[0];
       if (selectedFile) {
          if (selectedFile && types.includes(selectedFile.type)) {
             setImage(selectedFile);
@@ -45,35 +47,55 @@ const AddProducts = () => {
 
    const addProduct = (e) => {
       e.preventDefault();
+
+      // if (!title || !description || !price || !image) {
+      //    toast.error("Please provide value in each input field");
+      // } else {
+      //    fireDb.child("products").push(title,price, description, (err) => {
+      //       if (err) {
+      //          toast.error(err);
+      //       }
+      //       else {
+      //          toast.success("Product added successfully");
+      //       }
+      //    });
+      // }
       console.log(title, description, price);
       console.log(image);
+
+     
+      
       const uploadTask = storage.ref(`product-images/${image.name}`).put(image);
       uploadTask.on('state_changed', snapshot => {
          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
          console.log(progress);
-     }, error => setUploadError(error.message)
+      }, error => setUploadError(error.message)
          , () => {
-             storage.ref('product-images').child(image.name).getDownloadURL().then(url => {
-                 db.collection('Products').add({
-                    title,
-                    description,
-                    price: Number(price),
-                    url
+            storage.ref('product-images').child(image.name).getDownloadURL().then(url => {
+               db.collection('Products').add({
+                  title,
+                  description,
+                  price: Number(price),
+                  url
 
-                 }).then(() => {
-                    setSuccessMsg('Product successfully added')
-                    setTitle('');
-                    setDescription('');
-                    setPrice('')
-                    document.getElementById('file').value = '';
-                    setImageError('');
-                    setUploadError('');
-                    setTimeout(() => {
-                       setSuccessMsg('');
-                    }, 3000)
-                 }).catch(error => setUploadError(error.message))
-             })
+               }).then(() => {
+                 
+                  setSuccessMsg('Product successfully added')
+                  setTitle('');
+                  setDescription('');
+                  setPrice('')
+                  document.getElementById('file').value = '';
+                  setImageError('');
+                  setUploadError('');
+                  setTimeout(() => {
+                     setSuccessMsg('');
+                  }, 3000)
+               }).catch(error => setUploadError(error.message))
+               
+            })
          })
+      
+         
    }
 
    // const [state, setState] = useState(initialState);
@@ -81,8 +103,26 @@ const AddProducts = () => {
 
    // const { productname, price, description, category } = state;
 
-   // const handleInputChange = () => { }
-   // const handleSubmit = () => {}
+   // const handleInputChange = (e) => { 
+   //const { name, value}= e.target;
+   // setState({ ...state, [name]: value});
+   // };
+   // const handleSubmit = (e) => {  
+   // e.preventDefault();
+   // if(!title || !description || !price || !image ) {
+   // toast.error("Please provide value in each input field");
+   // } else {   fireDb.child("products").push(state, (err)=> {
+//    if (err) {
+//       toast.error(err);
+//    }
+//    else {
+//       toast.success("Product added successfully");
+//    }
+// });
+
+
+  // }
+// }
    return (
       // <div style={{marginTop: "100px"}}>
       //    <form style={{
@@ -168,7 +208,7 @@ const AddProducts = () => {
          {uploadError && <> 
             <br /><br />
                <div className="error-msg">{ uploadError}</div> </>  }
-     </div>
+     </div> 
    )
 }
 

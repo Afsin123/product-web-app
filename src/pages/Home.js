@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Products from '../components/Products';
 import { storage, db } from '../firebase';
+import IndividualProduct from '../components/IndividualProduct';
 import { Container, Row, Col, CardGroup, Card, Button } from 'react-bootstrap';
-import './Home.css';
+// import './Home.css';
 
 function Home() {
    //state of products
@@ -26,28 +27,32 @@ function Home() {
    useEffect(() => {
       getProducts();
    }, [])
+
+
    
    return (
-      <div>
+      <Row> 
+
          <h1> Home </h1>
          
          
-            {products.length > 0 && (
-               <div className="container-fluid">
-                  <h1 className="text-center"> Products </h1>
-                  <div className="products-box">
-                     <Products products={products} />
-                  </div>
-        
-               </div>
-         
-            )}
+         {products.length > 0 && (
+              <div>
+              <h1 className="text-center"> Products </h1>
+                     <Col sm={12} md={8} xl={3}> 
+                        <Products products={products} />
+                     </Col>
+              </div>
+         )}
           
 
          {products.length < 1 && (
             <div className="container-fluid"> Please wait... </div>
          )}
-      </div>
+
+
+                    
+     </Row>
    )
    // return(
    // <div className="container">

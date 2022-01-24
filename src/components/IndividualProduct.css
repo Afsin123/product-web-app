@@ -1,4 +1,12 @@
-.card{
+/* .card{
    display: flex;
+   flex-direction: row;
    
+} */
+
+.card-img, .card-img-top {
+   height: 250px;
+   width: 200px;
+   border-top-left-radius: calc(0.25rem - 1px);
+   border-top-right-radius: calc(0.25rem - 1px);
 }
