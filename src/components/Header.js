@@ -15,6 +15,9 @@ const Header = () => {
       else if (location.pathname === "/about") {
          setActiveTab("About")
       }
+      else if (location.pathname === "/view") {
+         setActiveTab("View")
+      }
       
    }, [location]);
 
@@ -38,6 +41,11 @@ const Header = () => {
                <p className={`${activeTab === "About"? "active" : ""}`} 
                onClick={()=> setActiveTab("About")}
                > About </p>
+            </Link>
+            <Link to= "/view">
+               <p className={`${activeTab === "View"? "active" : ""}`} 
+               onClick={()=> setActiveTab("View")}
+               > View List </p>
             </Link>
          
          </div>

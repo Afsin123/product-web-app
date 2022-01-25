@@ -31,16 +31,16 @@ function Home() {
 
    
    return (
-      <Row> 
+      <div> 
 
-         <h1> Home </h1>
+         {/* <h1> Home </h1>
          
          
          {products.length > 0 && (
               <div>
               <h1 className="text-center"> Products </h1>
-                     <Col sm={12} md={8} xl={3}> 
-                        <Products products={products} />
+                   <Col sm={12} md={8} xl={3}> 
+                        
                      </Col>
               </div>
          )}
@@ -48,29 +48,33 @@ function Home() {
 
          {products.length < 1 && (
             <div className="container-fluid"> Please wait... </div>
-         )}
+         )} */}
+ 
+         <Row> 
+                     
+                     <Products products={products} />
+                     </Row>
 
-
-                    
-     </Row>
+                     
+</div>
    )
    // return(
    // <div className="container">
    //          {products.length > 0 &&
    //              products.map(products=> (
-   //                  <Row xs={1} md={2} className="g-4">
-   //                  {Array.from({ length: 4 }).map((_, idx) => (
+   //                   <Row xs={1} md={2} className="g-4">
+   //                   {Array.from({ length: 4 }).map((_, idx) => (
    //                  <Col>
    //                     <h1 className="text-center"> Products </h1>
    //                 <div className="products-box">
    //                    <Products products={products} />
-   //                 </div>
-   //                  </Col>
-   //              ))}
-   //              </Row>
-   //            ))}
-   //    </div>
-   // )
+   //                  </div>
+   //                   </Col>
+   //               ))}
+   //               </Row>
+   //             ))}
+   //     </div>
+   //  )
 }
 
 export default Home

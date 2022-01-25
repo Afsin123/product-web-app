@@ -20,7 +20,7 @@ const IndividualProduct = ({ individualProduct }) => {
       //    </Card.Body>
       // </Card>
 
-<Card className= "my-3 p-3">
+<Card className= "my-3 p-3 col-md-3">
 <Card.Img src={individualProduct.url} alt="product-img" className= "p-3" variant= 'top'/>
 <Card.Body>
    <Card.Title> {individualProduct.title} </Card.Title>
@@ -29,7 +29,7 @@ const IndividualProduct = ({ individualProduct }) => {
       <br />
       <strong>  ₹ {individualProduct.price} </strong>
    </Card.Text>
-   <Button variant="primary">ADD TO CART </Button>
+            <Button variant="primary">ADD TO CART </Button>   
 </Card.Body>
 </Card>
 
