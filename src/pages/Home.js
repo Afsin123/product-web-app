@@ -52,7 +52,8 @@ function Home() {
  
          <Row> 
                      
-                     <Products products={products} />
+            <Products products={products} />
+            console.log(products)
                      </Row>
 
                      
