@@ -18,6 +18,8 @@ const AddProducts = () => {
    const [description, setDescription] = useState('');
    const [price, setPrice] = useState('');
    const [image, setImage] = useState(null);
+   // const { id } = useParams();
+   // const history = useHistory();
 
    // const [state, setState] = useState(initialState);
 
@@ -77,6 +79,7 @@ const AddProducts = () => {
                   description,
                   price: Number(price),
                   url
+            
 
                }).then(() => {
                  

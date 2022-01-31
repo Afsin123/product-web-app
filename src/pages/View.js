@@ -142,8 +142,8 @@ const View = () => {
                 <td>{products[id].price}</td>
                 <td> {products[id].image} </td>
                 <td>
-                  <Link to={`/update/${id}`}>
-                    <button className="bttn btn-edit" onClick={() => onUpdate(id)}>Edit</button>
+                  <Link to={`/update/${products[id].ID}`}>
+                    <button className="bttn btn-edit" >Edit</button>
                   </Link>
                   <button
                     className="bttn btn-delete"
