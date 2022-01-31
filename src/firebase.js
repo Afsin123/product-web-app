@@ -29,5 +29,7 @@ const storage = firebase.storage();
 
 
 
-export  {fireDb, auth, db, storage};
+export { fireDb, auth, db, storage };
+
+   
 

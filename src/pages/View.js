@@ -1,17 +1,19 @@
 
 import React, { useState, useEffect } from "react"; 
 import { Link } from "react-router-dom"; 
-import { toast } from "react-toastify";
-import { db as fireDb } from "../firebase";
-import Products from '../components/Products';
+// import { toast } from "react-toastify";
+//import { db as fireDb } from "../firebase";
+//import Products from '../components/Products';
 import { storage, db } from '../firebase';
-import { doc, deleteDoc } from "firebase/firestore"; 
-import { Firebase } from '../firebase';
+//import { doc, deleteDoc } from "firebase/firestore"; 
+//import { Firebase } from '../firebase';
 
 const View = () => {
   // var productRef= firebase.firestore().collection("/Products");
   
   const [products, setProducts] = useState([]); 
+  const [data,setData]= useState({});
+
 
   // useEffect(() => {
   //   fireDb.child("products").on("value", (snapshot) => {
@@ -64,7 +66,7 @@ const View = () => {
 //     .then((snapshot) => {
 //       if (snapshot.docs.length) {
 //         snapshot.docs.forEach((doc) => {
-//           setAlldocs((prev) => {
+//           setProducts((prev) => {
 //             return [...prev, { data: doc.data(), id: doc.id }];
 //           });
 //         });
@@ -72,10 +74,12 @@ const View = () => {
 //     })
 //   console.log(allDocs);
 // }
- useEffect(() => {
-   getProducts();
-   //fetchAll();
- }, [])
+  useEffect(() => {
+      getProducts({});
+      
+  }, []);
+        
+ 
 
   
   const onDelete = (id) => { 
@@ -83,14 +87,17 @@ const View = () => {
     if (
       window.confirm("Are you sure that you wanted to delete the product ?")
     ) {
-      db.collection("Products").doc("Black Womens Jacket Trendy").delete()
+      // db.collection("Products").doc(id).delete()
+      db.collection('Products').doc(products[id].ID).delete()
         .then(() => {
           console.log("Document deleted successfully");
+
         }).catch((err) => {
           console.log("An error occured while deleting the document");
           console.log("Error: " + err.message);
       }) 
     }
+    
   }
   
    
@@ -130,7 +137,7 @@ const View = () => {
           {Object.keys(products).map((id, index) => {
             return (
               <tr key={id}>
-                <th scope="row">{index + 1}</th>
+                <th scope="row">{index+1}</th>
                 <td>{products[id].title}</td>
                 <td>{products[id].price}</td>
                 <td> {products[id].image} </td>
@@ -141,10 +148,10 @@ const View = () => {
                   <button
                     className="bttn btn-delete"
                     onClick={() => onDelete(id)}
-                  >
+                     >
                     Delete
                   </button>
-                  <Link to={`/view/${id}`}>
+                  <Link to={`/viewproduct/${products[id].ID}`}>
                     <button className="bttn btn-view">View</button>
                   </Link>
                 </td>
