@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import './AddEdit.css';
 import { fireDb, storage, db } from '../firebase';
 // import fireDb from "../firebase";
@@ -18,8 +18,46 @@ const AddProducts = () => {
    const [description, setDescription] = useState('');
    const [price, setPrice] = useState('');
    const [image, setImage] = useState(null);
-   // const { id } = useParams();
-   // const history = useHistory();
+   const { id } = useParams();
+   const Navigate = useNavigate();
+   // { title, description, price } =  state;
+   // const [state,setState] = useState('');
+
+   const [products, setProducts] = useState([]);
+   
+   // getting products function
+   const getProducts = async () => {
+      const products = await db.collection('Products').get();
+      const productsArray = [];
+      for (var snap of products.docs) {
+         var data = snap.data();
+         data.ID = snap.id;
+         productsArray.push({
+            ...data
+         })
+         if (productsArray.length === products.docs.length) {
+            setProducts(productsArray); 
+         }
+      }
+   }
+   useEffect(() => {
+      getProducts();
+   }, [id])
+
+   useEffect(() => {
+      if (products[id].ID) {
+         setTitle({...products[id]})
+      }
+      else {
+        setTitle('')
+      }
+      
+     return () => {
+      setTitle('');
+     };
+   }, [id, products]);
+   console.log()
+   
 
    // const [state, setState] = useState(initialState);
 

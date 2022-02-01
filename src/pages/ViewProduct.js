@@ -10,18 +10,32 @@ const ViewProduct = () => {
 
   console.log(id)
   const getProducts = async () => {
-    const products = await db.collection("Products").get();
+    const products = await db.collection("Products").doc(id).get();
+    if (products.exists) {
+      setProducts(products.data())
+      // console.log("Document data:", doc.data());
+  } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+  }
+
+   
+
+    
+    console.log(products);
     const productsArray = [];
-    for (var snap of products.docs) {
-      var data = snap.data();
-      data.ID = snap.id;
-      productsArray.push({
-        ...data,
-      });
-      if (productsArray.length === products.docs.length) {
-        setProducts(productsArray);
-      }
-    }
+    // for (var snap of products.docs) {
+    //   var data = snap.data();
+    //   data.ID = snap.id;
+    //   productsArray.push({
+    //     ...data,
+    //   });
+    //   console.log(productsArray); 
+
+      // if (productsArray.length === products.docs.length) {
+      //   setProducts(productsArray);
+      // }
+    // }
   };
   useEffect(() => {
     getProducts();
@@ -48,7 +62,7 @@ const ViewProduct = () => {
             src={products.url}
             alt="product-img"
             className="p-3"
-            variant="top"
+            variant="top"  
             />
         
           <Card.Body>
