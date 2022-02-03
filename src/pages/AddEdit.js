@@ -27,36 +27,40 @@ const AddProducts = () => {
    
    // getting products function
    const getProducts = async () => {
-      const products = await db.collection('Products').get();
-      const productsArray = [];
-      for (var snap of products.docs) {
-         var data = snap.data();
-         data.ID = snap.id;
-         productsArray.push({
-            ...data
-         })
-         if (productsArray.length === products.docs.length) {
-            setProducts(productsArray); 
-         }
+      const products = await db.collection("Products").doc(id).get();
+      if (products.exists) {
+         setProducts(products.data());
+         
+         // console.log("Document data:", doc.data());
+      } else {
+         // doc.data() will be undefined in this case
+         console.log("No such document!");
+
+         
       }
+     
    }
    useEffect(() => {
       getProducts();
    }, [id])
 
-   useEffect(() => {
-      if (products[id].ID) {
-         setTitle({...products[id]})
-      }
-      else {
-        setTitle('')
-      }
+
+
+   // useEffect(() => {
+   //     if (id) {
+   //       setProducts(products.data())
+   //       // console.log("Document data:", doc.data());
+   //   } 
+   //    else {
+   //      setTitle('')
+   //    }
       
-     return () => {
-      setTitle('');
-     };
-   }, [id, products]);
-   console.log()
+   //   return () => {
+   //    setTitle('');
+   //   };
+   // }, [id, products]);
+   console.log("id is ",id)
+   console.log(products )
    
 
    // const [state, setState] = useState(initialState);
@@ -103,8 +107,6 @@ const AddProducts = () => {
       console.log(title, description, price);
       console.log(image);
 
-     
-      
       const uploadTask = storage.ref(`product-images/${image.name}`).put(image);
       uploadTask.on('state_changed', snapshot => {
          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -117,7 +119,6 @@ const AddProducts = () => {
                   description,
                   price: Number(price),
                   url
-            
 
                }).then(() => {
                  
@@ -135,20 +136,18 @@ const AddProducts = () => {
                
             })
          })
-      
-         
+     
    }
   
-
    // const [state, setState] = useState(initialState);
    // const [data, setData] = useState({});
 
    // const { productname, price, description, category } = state;
 
-   // const handleInputChange = (e) => { 
-   //const { name, value}= e.target;
-   // setState({ ...state, [name]: value});
-   // };
+   const handleInputChange = (e) => { 
+   const { name, value}= e.target;
+   setProducts({} );
+    };
    // const handleSubmit = (e) => {  
    // e.preventDefault();
    // if(!title || !description || !price || !image ) {
@@ -204,12 +203,6 @@ const AddProducts = () => {
                
       //       />
 
-
-
-
-
-
-
       //    </form>
       // </div>
       <div className="container">
@@ -223,9 +216,11 @@ const AddProducts = () => {
                </> }
          <form autoComplete='off' className='form-group' onSubmit={addProduct} >
             <label> Title </label>
-            <input type="text" className='form-control' required
+            <input type="text" className='form-control' name="title"  required
             onChange={(e)=> setTitle(e.target.value)} value={title}/>    
-          <br /> 
+            
+
+        
             <label> Product Description</label>
             <input type="text" className='form-control' required
             onChange={(e)=> setDescription(e.target.value)} value={description} /> 
