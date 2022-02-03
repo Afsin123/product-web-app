@@ -28,37 +28,23 @@ const View = () => {
   //     setData({});
   //   };
   // }, []);
-  
-  // We’re gonna use instance of firebase.firestore.CollectionReference to read/write data from the Firestore.
-  // – Read collection once using get():
 
-  // tutorialsRef.get().then(function(snapshot) {
-  //   vat tutorials = [];
-  
-  //   snapshot.forEach(function(childSnapshot) {
-  //     var id = childSnapshot.id;
-  //     var data = childSnapshot.val();
-  //     // ...
-  
-  //     tutorials.push({ id: id, title: data.title, description: data.description});
-  //   });
-  // });
   
    // getting products function
-   const getProducts = async () => {
+  const getProducts = async () => {
     const products = await db.collection('Products').get();
     const productsArray = [];
     for (var snap of products.docs) {
-       var data = snap.data();
-       data.ID = snap.id;
-       productsArray.push({
-          ...data
-       })
-       if (productsArray.length === products.docs.length) {
-          setProducts(productsArray); 
-       }
+      var data = snap.data();
+      data.ID = snap.id;
+      productsArray.push({
+        ...data
+      })
+      if (productsArray.length === products.docs.length) {
+        setProducts(productsArray);
+      }
     }
- }
+  }
 
 // funtion fetchAll() {
 //   db.collection("Products")

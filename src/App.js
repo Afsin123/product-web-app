@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from './components/Header';
 import AddProducts from './pages/AddEdit';
 import ViewProduct from './pages/ViewProduct';
+import UpdateProduct from './pages/UpdateProduct';
 
 
 function App() {

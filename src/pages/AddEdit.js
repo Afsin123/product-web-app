@@ -28,39 +28,83 @@ const AddProducts = () => {
    // getting products function
    const getProducts = async () => {
       const products = await db.collection("Products").doc(id).get();
-      if (products.exists) {
-         setProducts(products.data());
+      // if (products.exists) {
+        
+      //    setProducts(products.data());
          
-         // console.log("Document data:", doc.data());
-      } else {
-         // doc.data() will be undefined in this case
-         console.log("No such document!");
+      //    // console.log("Document data:", doc.data());
+      // } else {
+      //    // doc.data() will be undefined in this case
+      //    console.log("No such document!");
 
          
+      // }
+      if (products.exists) {
+         db.collection("Products").doc(id).set(products).then(() => {
+            console.log("Document successfully written!");
+        }); 
+         //  setProducts(products.data())
+         //  setTitle(products.title);
+         // setDescription(products.description);
+         // setPrice(products.price);
+          
+          
+         // console.log("Document data:", doc.data());
+     } 
+      else {
+          setProducts("");
       }
-     
+      
    }
    useEffect(() => {
       getProducts();
    }, [id])
 
-
+   const updateProduct = async () => {
+     
+    }
 
    // useEffect(() => {
    //     if (id) {
-   //       setProducts(products.data())
+   //       //  setProducts({ ...products[id] })
+   //        setTitle(products.title);
+   //       setDescription(products.description);
+   //       setPrice(products.price);
+          
+          
    //       // console.log("Document data:", doc.data());
    //   } 
    //    else {
-   //      setTitle('')
+   //        setProducts("");
    //    }
       
    //   return () => {
-   //    setTitle('');
+   //   setProducts(" ")
    //   };
-   // }, [id, products]);
+   // }, [id]);
+   
+   // if (id) {
+   //    const onUpdate = (id) => { 
+    
+   //       if (
+   //         window.confirm("Are you sure that you wanted to update the product details?")
+   //       ) {
+   //         // db.collection("Products").doc(id).delete()
+   //         db.collection('Products').doc(products[id].ID).delete()
+   //           .then(() => {
+   //             console.log("Document deleted successfully");
+     
+   //           }).catch((err) => {
+   //             console.log("An error occured while deleting the document");
+   //             console.log("Error: " + err.message);
+   //         }) 
+   //       }
+         
+   //     }
+       
+   // }
    console.log("id is ",id)
-   console.log(products )
+   console.log(products)
    
 
    // const [state, setState] = useState(initialState);
