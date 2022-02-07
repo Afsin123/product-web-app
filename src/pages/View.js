@@ -130,6 +130,8 @@ const View = () => {
                 <td>
                   <Link to={`/update/${products[id].ID}`}>
                     <button className="bttn btn-edit" >Edit</button>
+                   
+                    
                   </Link>
                   <button
                     className="bttn btn-delete"

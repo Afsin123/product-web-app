@@ -5,13 +5,6 @@ import { fireDb, storage, db } from '../firebase';
 // import fireDb from "../firebase";
 import { toast } from "react-toastify";
 
-
-// const initialState= {
-//    title: "",
-//    price: "",
-//    description: "",
-   
-// }
 const AddProducts = () => {
 
    const [title, setTitle] = useState('');
@@ -19,11 +12,14 @@ const AddProducts = () => {
    const [price, setPrice] = useState('');
    const [image, setImage] = useState(null);
    const { id } = useParams();
-   const Navigate = useNavigate();
+   const history = useNavigate();
+
+   console.log("id is ",id) 
    // { title, description, price } =  state;
    // const [state,setState] = useState('');
 
    const [products, setProducts] = useState([]);
+   
    
    // getting products function
    const getProducts = async () => {
@@ -40,13 +36,14 @@ const AddProducts = () => {
          
       // }
       if (products.exists) {
-         db.collection("Products").doc(id).set(products).then(() => {
-            console.log("Document successfully written!");
-        }); 
+         // db.collection("Products").doc(id).set(products).then(() => {
+         //    console.log("Document successfully written!");
+      //   }); 
          //  setProducts(products.data())
-         //  setTitle(products.title);
-         // setDescription(products.description);
-         // setPrice(products.price);
+          setTitle(products.data().title);
+           setDescription(products.data().description);
+         setPrice(products.data().price);
+         setPrice(products.data().image);
           
           
          // console.log("Document data:", doc.data());
@@ -54,15 +51,14 @@ const AddProducts = () => {
       else {
           setProducts("");
       }
+
+      
       
    }
    useEffect(() => {
       getProducts();
    }, [id])
 
-   const updateProduct = async () => {
-     
-    }
 
    // useEffect(() => {
    //     if (id) {
@@ -103,8 +99,8 @@ const AddProducts = () => {
    //     }
        
    // }
-   console.log("id is ",id)
-   console.log(products)
+   
+   
    
 
    // const [state, setState] = useState(initialState);
@@ -180,7 +176,7 @@ const AddProducts = () => {
                
             })
          })
-     
+         setTimeout(() => history.push("/"), 500);
    }
   
    // const [state, setState] = useState(initialState);
@@ -192,7 +188,7 @@ const AddProducts = () => {
    const { name, value}= e.target;
    setProducts({} );
     };
-   // const handleSubmit = (e) => {  
+   // const handleSubmit = (e) => {
    // e.preventDefault();
    // if(!title || !description || !price || !image ) {
    // toast.error("Please provide value in each input field");
@@ -208,6 +204,7 @@ const AddProducts = () => {
 
   // }
 // }
+   
    return (
       // <div style={{marginTop: "100px"}}>
       //    <form style={{
@@ -280,8 +277,9 @@ const AddProducts = () => {
             {imageError && <> 
                <br /><br />
                <div className="error-msg">{ imageError}</div>
-               </> }
-            
+            </>}
+            {/* <div> src={url}
+            alt="product-img" </div> */}
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <button type= "submit" className='btn btn-success btn-md' > SUBMIT </button>
             </div>

@@ -3,6 +3,7 @@ import { storage, db } from '../firebase';
 import { useParams, Link } from "react-router-dom";
 import { Card, Button } from "react-bootstrap";
 import Products from "../components/Products";
+import './ViewProduct.css'; 
 
 const ViewProduct = () => {
   const [products, setProducts] = useState([]);
@@ -57,26 +58,44 @@ const ViewProduct = () => {
     
         return (
     
-        <Card>
-          <Card.Img
-            src={products.url}
-            alt="product-img"
-            className="p-3"
-            variant="top"  
-            />
+        // <Card>
+        //   <Card.Img
+        //     src={products.url}
+        //     alt="product-img"
+        //     className="p-3"
+        //     variant="top"  
+        //     />
         
-          <Card.Body>
-          <Card.Title> {id} </Card.Title>
-            <Card.Title> {products.title} </Card.Title>
-            <Card.Text>
-              {products.description}
-              <br />
-              <strong> ₹ {products.price} </strong>
-               </Card.Text>
-               <Link to="/"> <Button variant="primary"> GO BACK TO VIEW LIST </Button> </Link>
+        //   <Card.Body>
+        //   <Card.Title> {id} </Card.Title>
+        //     <Card.Title> {products.title} </Card.Title>
+        //     <Card.Text>
+        //       {products.description}
+        //       <br />
+        //       <strong> ₹ {products.price} </strong>
+        //        </Card.Text>
+        //        <Link to="/"> <Button variant="primary"> GO BACK TO VIEW LIST </Button> </Link>
         
-          </Card.Body>
-         </Card>
+        //   </Card.Body>
+        //  </Card>
+          <div className="container">
+            <div className="product-box">
+            
+           
+          <img src={products.url}
+              alt="product-img"  className="image-product"
+                   /> 
+             <div> Test product </div>
+            <div > {products.title}  </div>
+            <div className="product-id"> ID:  {id}  </div>
+            <div> {products.description} </div>
+            
+            <Link to="/"> <Button variant="primary"> GO BACK TO VIEW LIST </Button> </Link>
+
+            </div>
+          </div>
+          
+          
     
        ); 
   

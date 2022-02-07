@@ -1,0 +1,16 @@
+/* .product-box{
+   border: 2px solid black;
+   height: 380px;
+   width: 280px;
+   margin-left: 20%;
+   align-items: center;
+  } */
+
+.image-product{
+ 
+ height: 250px;
+ width: 200px;
+ align-items: center;
+justify-content: center;
+}
+
