@@ -7,7 +7,7 @@ import './ViewProduct.css';
 
 const ViewProduct = () => {
   const [products, setProducts] = useState([]);
-  const { id } = useParams();
+   const { id } = useParams();
 
   console.log(id)
   const getProducts = async () => {
