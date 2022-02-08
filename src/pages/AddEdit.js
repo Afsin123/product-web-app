@@ -164,6 +164,7 @@ const AddProducts = () => {
                  
                   setSuccessMsg('Product successfully added')
                   setTitle('');
+                  
                   setDescription('');
                   setPrice('')
                   document.getElementById('file').value = '';
@@ -271,6 +272,17 @@ const AddProducts = () => {
             <input type="number" className='form-control' required
                onChange={(e)=> setPrice(e.target.value)} value={price} />  
             <br />
+            <div>
+              <label htmlFor="image">Image</label>
+              <input
+                id="image"
+                type="text"
+                placeholder="Enter image"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              ></input>
+            </div>
+            <br/> 
             <label> Upload Product Image</label>
             <input type="file"  id="file" className='form-control' onChange={productImageHandler} />
             <br /><br />

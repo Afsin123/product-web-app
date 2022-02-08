@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect } from "react"; 
-import { Link } from "react-router-dom"; 
+import React, { useState, useEffect, useLayoutEffect } from "react"; 
+import { Link , useNavigate, useParams} from "react-router-dom"; 
 // import { toast } from "react-toastify";
 //import { db as fireDb } from "../firebase";
 //import Products from '../components/Products';
@@ -8,11 +8,13 @@ import { storage, db } from '../firebase';
 //import { doc, deleteDoc } from "firebase/firestore"; 
 //import { Firebase } from '../firebase';
 
-const View = () => {
+const View = ({match}) => {
   // var productRef= firebase.firestore().collection("/Products");
   
   const [products, setProducts] = useState([]); 
   const [data,setData]= useState({});
+  const { id } = useParams();
+  const navigate = useNavigate();
 
 
   // useEffect(() => {
@@ -65,7 +67,8 @@ const View = () => {
       
   }, []);
         
- 
+  const details = products.find((i)=> i.id==match.params.id)
+  console.log("my data is", details)
 
   
   const onDelete = (id) => { 
@@ -86,7 +89,13 @@ const View = () => {
     
   }
   
-   
+  useEffect(() => {
+    if(products[id].ID !== id){
+      window.confirm("Product id not found!!! Add product")
+      navigate('/add') 
+    }
+    
+}, []);
     // {
     //   db.child(`products/${id}`).delete((error) => {
     //     if (error) {
