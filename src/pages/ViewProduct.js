@@ -5,7 +5,7 @@ import { Card, Button } from "react-bootstrap";
 import Products from "../components/Products";
 import './ViewProduct.css'; 
 
-const ViewProduct = () => {
+const ViewProduct = ({match}) => {
   const [products, setProducts] = useState([]);
    const { id } = useParams();
 
@@ -19,30 +19,16 @@ const ViewProduct = () => {
       // doc.data() will be undefined in this case
       console.log("No such document!");
   }
-
-   
-
-    
+ 
     console.log(products);
-    const productsArray = [];
-    // for (var snap of products.docs) {
-    //   var data = snap.data();
-    //   data.ID = snap.id;
-    //   productsArray.push({
-    //     ...data,
-    //   });
-    //   console.log(productsArray); 
-
-      // if (productsArray.length === products.docs.length) {
-      //   setProducts(productsArray);
-      // }
-    // }
+   
+    const details = products.find((products)=> products.id==match.params.id)
+  console.log("my data is", details)
   };
   useEffect(() => {
     getProducts();
   }, [id]);
 
-  
   
   // {
   //   Object.keys(products).map((id, index) => {

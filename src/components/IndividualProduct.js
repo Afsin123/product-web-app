@@ -1,6 +1,7 @@
 import React from 'react';
 import './IndividualProduct.css';
 import { Card, Button, CardGroup } from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 
 const IndividualProduct = ({ individualProduct }) => {
    // console.log(individualProduct);
@@ -19,7 +20,7 @@ const IndividualProduct = ({ individualProduct }) => {
       //       <Button variant="primary">ADD TO CART </Button>
       //    </Card.Body>
       // </Card>
-
+<Link to={(`viewproducts/${individualProduct.id}`)}> 
 <Card className= "my-3 p-3 col-md-3">
 <Card.Img src={individualProduct.url} alt="product-img" className= "p-3" variant= 'top'/>
 <Card.Body>
@@ -32,7 +33,7 @@ const IndividualProduct = ({ individualProduct }) => {
             <Button variant="primary">ADD TO CART </Button>   
 </Card.Body>
 </Card>
-
+</Link>
       
       
       // </Card>
