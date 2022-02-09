@@ -12,7 +12,8 @@ const AddProducts = () => {
   const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
   const [products, setProducts] = useState([]);
-
+  const [imageUrl, setImageUrl] = useState(null); 
+  
   const { id } = useParams();
   const history = useNavigate();
 
@@ -31,6 +32,7 @@ const AddProducts = () => {
       setTitle(products.data().title);
       setDescription(products.data().description);
       setPrice(products.data().price);
+      setImageUrl(products.data().url);
       setProducts(products.data());
 
       console.log("Document data:", products);
@@ -94,10 +96,12 @@ const AddProducts = () => {
 
   const productImageHandler = (e) => {
     let selectedFile = e.target.files[0];
+    console.log(selectedFile);
     if (selectedFile) {
       if (selectedFile && types.includes(selectedFile.type)) {
+        setImageUrl(URL.createObjectURL(e.target.files[0]));
+        setImageError(""); 
         setImage(selectedFile);
-        setImageError("");
       } else {
         setImage(null);
         setImageError("Please select a valid image type or jpeg");
@@ -107,7 +111,7 @@ const AddProducts = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (!title || !description || !price) {
       toast.error("PLease provide value in each input field");
@@ -138,6 +142,7 @@ const AddProducts = () => {
                   .then(() => {
                     setSuccessMsg("Product successfully added");
                     setTitle("");
+                    setImageUrl('');
                     setDescription("");
                     setPrice("");
                     document.getElementById("file").value = "";
@@ -153,15 +158,24 @@ const AddProducts = () => {
         );
         setTimeout(() => history.push("/"), 500);
       } else{
-         db.collection('Products').doc(id).update({  title,
+         console.log("ImageUrl is ", imageUrl)
+         let url = imageUrl; 
+         if(image){
+          url = await uploadImage(image); 
+          console.log( " uRL is ", url )
+          
+         }
+         console.log("THe url is ", url)
+             db.collection('Products').doc(id).update({  title,
             description,
             price,
-            // url
+            url
             }) 
            
             .then(() => {
                setSuccessMsg("Product successfully updated");
                setTitle("");
+               setImageUrl(""); 
                setDescription("");
                setPrice("");
                document.getElementById("file").value = "";
@@ -178,50 +192,34 @@ const AddProducts = () => {
     }
   };
 
-//   const addProduct = (e) => {
-//     e.preventDefault();
+  const uploadImage = ((image)=>{
+   let uploadUrl = null;
+   const uploadTask = storage.ref(`product-images/${image}`).put(image);
+   uploadTask.on( 
+    "state_changed",
+    (snapshot) => {
+      const progress =
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log(progress);
+    },
+    (error) => setUploadError(error.message),
+    () => {
+      storage
+        .ref("product-images")
+        .child(image.name)
+        .getDownloadURL().then((url)=> {
+         console.log("Url is: ", url) 
+         uploadUrl = url; 
+         return url;
+          
+  
+     });
+     }) 
+      console.log("upload url ", uploadUrl)
+  } )
 
-//     const uploadTask = storage.ref(`product-images/${image}`).put(image);
-//     uploadTask.on(
-//       "state_changed",
-//       (snapshot) => {
-//         const progress =
-//           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-//         console.log(progress);
-//       },
-//       (error) => setUploadError(error.message),
-//       () => {
-//         storage
-//           .ref("product-images")
-//           .child(image.name)
-//           .getDownloadURL()
-//           .then((url) => {
-//             db.collection("Products")
-//               .add({
-//                 title,
-//                 description,
-//                 price: Number(price),
-//                 url,
-//               })
-//               .then(() => {
-//                 setSuccessMsg("Product successfully added");
-//                 setTitle("");
-//                 setDescription("");
-//                 setPrice("");
-//                 document.getElementById("file").value = "";
-//                 setImageError("");
-//                 setUploadError("");
-//                 setTimeout(() => {
-//                   setSuccessMsg("");
-//                 }, 3000);
-//               })
-//               .catch((error) => setUploadError(error.message));
-//           });
-//       }
-//     );
-//     setTimeout(() => history.push("/"), 500);
-//   };
 
+  
   return (
     <div className="container">
       <br />
@@ -238,9 +236,9 @@ const AddProducts = () => {
       )}
       <form autoComplete="off" className="form-group" onSubmit={handleSubmit}>
         <label> Title </label>
-        <input
-          type="text"
-          className="form-control"
+        <input 
+          type="text" 
+          className="form-control" 
           name="title"
           required
           onChange={(e) => setTitle(e.target.value)}
@@ -266,19 +264,24 @@ const AddProducts = () => {
           value={price}
         />
         <br />
-        <div className="product-box">
-        <img src={image} alt="product-img" className="image-product" />
-      </div> 
-
-        <label> Upload Product Image</label>
-        <input
+        <div className="row">
+         <div className="col-md-6">  
+        <label > {imageUrl ? "Change ": "Upload" } Product Image</label>
+        <input 
           type="file"
           id="file"
          //  value ={image}
           className="form-control"
           onChange={productImageHandler}
-        />
-
+        /> 
+          </div>
+        {imageUrl && 
+          <div className="product-box col-md-6">
+             <p> Current Product Image</p>
+          <img src={imageUrl} alt="product-img" className="image-product" />
+        </div> 
+        }
+       </div>
         <br />
         <br />
         {imageError && (
