@@ -12,6 +12,11 @@ body{
    
    font-family: 'Open Sans', sans-serif;
 }
+/* .product-box{
+   border: 1px solid black ;
+   width: 200px;
+   height: 250px; 
+} */
 
 @media  (max-width:768px) {
    .mybtn{
