@@ -18,6 +18,10 @@ body{
    height: 250px; 
 } */
 
+.product-box col-md-6 {
+   padding-left: 130px;
+}
+
 @media  (max-width:768px) {
    .mybtn{
       width: 100%;

@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import "./AddEdit.css";
 
-import { fireDb, storage, db } from "../firebase";
+import { fireDb, storage, db, imageupload, updateProduct} from "../firebase";
 // import fireDb from "../firebase";
 import { toast } from "react-toastify";
+import { getDownloadURL } from "firebase/storage";
 
 const AddProducts = () => {
   const [title, setTitle] = useState("");
@@ -161,31 +162,66 @@ const AddProducts = () => {
          console.log("ImageUrl is ", imageUrl)
          let url = imageUrl; 
          if(image){
-          url = await uploadImage(image); 
-          console.log( " uRL is ", url )
-          
+          // url = await uploadImage(image); 
+          // console.log( " uRL is ", url )
+            imageupload(image).then((snapshot)=>{
+            getDownloadURL(snapshot.ref).then((downloadURL) => { 
+                // console.log('File available at', downloadURL);
+                // const bannerPath = snapshot.metadata.fullPath;
+
+                 (async () => {
+                  /* */
+                  await updateProduct( id, title, description, price, downloadURL) 
+                })()
+            })
+          } )
+        
+         } else {
+          (async () => {
+            /* */
+            await updateProduct( id, title, description, price, url) 
+          })()  
          }
          console.log("THe url is ", url)
-             db.collection('Products').doc(id).update({  title,
-            description,
-            price,
-            url
-            }) 
+
+         setSuccessMsg("Product successfully updated");
+         setTitle("");
+         setImageUrl(""); 
+         setDescription("");
+         setPrice("");
+         document.getElementById("file").value = "";
+         setImageError("");
+         setUploadError("");
+         setTimeout(() => {
+           setSuccessMsg("");
+         }, 3000);
+
+
+
+
+
+
+
+            //  db.collection('Products').doc(id).update({  title,
+            // description,
+            // price,
+            // url
+            // }) 
            
-            .then(() => {
-               setSuccessMsg("Product successfully updated");
-               setTitle("");
-               setImageUrl(""); 
-               setDescription("");
-               setPrice("");
-               document.getElementById("file").value = "";
-               setImageError("");
-               setUploadError("");
-               setTimeout(() => {
-                 setSuccessMsg("");
-               }, 3000);
-             })
-             .catch((error) => setUploadError(error.message));
+            // .then(() => {
+            //    setSuccessMsg("Product successfully updated");
+            //    setTitle("");
+            //    setImageUrl(""); 
+            //    setDescription("");
+            //    setPrice("");
+            //    document.getElementById("file").value = "";
+            //    setImageError("");
+            //    setUploadError("");
+            //    setTimeout(() => {
+            //      setSuccessMsg("");
+            //    }, 3000);
+            //  })
+            //  .catch((error) => setUploadError(error.message));
          
             // console.log("Product updated successfully!!")
       } 
