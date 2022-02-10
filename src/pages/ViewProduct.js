@@ -5,7 +5,7 @@ import { Card, Button } from "react-bootstrap";
 import Products from "../components/Products";
 import './ViewProduct.css'; 
 
-const ViewProduct = ({match}) => {
+const ViewProduct = ({ }) => {
   const [products, setProducts] = useState([]);
    const { id } = useParams();
 
@@ -30,17 +30,7 @@ const ViewProduct = ({match}) => {
   }, [id]);
 
   console.log(products);
-  // {
-  //   Object.keys(products).map((id, index) => {
-  //     return (
-  //       <table>
-  //         <tr key={id}>
-  //           <th scope="row">{index + 1}</th>
-  //           <td>{products[id].title}</td>
-  //           <td>{products[id].price}</td>
-  //           <td> {products[id].image} </td>
-  //         </tr>
-  //       </table>);
+ 
     
         return (
     

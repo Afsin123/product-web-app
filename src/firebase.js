@@ -40,6 +40,20 @@ export const updateProduct= async (id, title, description, price, url) => {
       return "error";
    }
 }
+
+export const addProduct = async (id, title, description, price, url)=> {
+   try{
+      await db.collection("Products")
+      .add({
+        title,
+        description,
+        price: Number(price),
+        url,
+      }); return "Success";
+   }catch(err){
+      return "error";
+   }
+}
 export { fireDb, auth, db, storage };
 
    
