@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import "./AddEdit.css";
 
-import { fireDb, storage, db, imageupload, updateProduct} from "../firebase";
+import { fireDb, storage, db, imageupload, updateProduct, addProduct} from "../firebase";
 // import fireDb from "../firebase";
 import { toast } from "react-toastify";
 import { getDownloadURL } from "firebase/storage";
@@ -118,46 +118,85 @@ const AddProducts = () => {
       toast.error("PLease provide value in each input field");
     } else {
       if (!id) {
-        const uploadTask = storage.ref(`product-images/${image}`).put(image);
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log(progress);
-          },
-          (error) => setUploadError(error.message),
-          () => {
-            storage
-              .ref("product-images")
-              .child(image.name)
-              .getDownloadURL()
-              .then((url) => {
-                db.collection("Products")
-                  .add({
-                    title,
-                    description,
-                    price: Number(price),
-                    url,
-                  })
-                  .then(() => {
-                    setSuccessMsg("Product successfully added");
-                    setTitle("");
-                    setImageUrl('');
-                    setDescription("");
-                    setPrice("");
-                    document.getElementById("file").value = "";
-                    setImageError("");
-                    setUploadError("");
-                    setTimeout(() => {
-                      setSuccessMsg("");
-                    }, 3000);
-                  })
-                  .catch((error) => setUploadError(error.message));
-              });
-          }
-        );
-        setTimeout(() => history.push("/"), 500);
+
+        let url = imageUrl; 
+        if(image){
+         // url = await uploadImage(image); 
+         // console.log( " uRL is ", url )
+           imageupload(image).then((snapshot)=>{
+           getDownloadURL(snapshot.ref).then((downloadURL) => { 
+               // console.log('File available at', downloadURL);
+               // const bannerPath = snapshot.metadata.fullPath;
+
+                (async () => {
+                 /* */
+                 await addProduct( id, title, description, price, downloadURL) 
+               })()
+           })
+         } )
+       
+        } else {
+         (async () => {
+           /* */
+           await addProduct( id, title, description, price, url) 
+         })()  
+        }
+        console.log("THe url is ", url)
+
+        setSuccessMsg("Product successfully updated");
+        setTitle("");
+        setImageUrl(""); 
+        setDescription("");
+        setPrice("");
+        document.getElementById("file").value = "";
+        setImageError("");
+        setUploadError("");
+        setTimeout(() => {
+          setSuccessMsg("");
+        }, 3000);
+
+
+
+        // const uploadTask = storage.ref(`product-images/${image}`).put(image);
+        // uploadTask.on(
+        //   "state_changed",
+        //   (snapshot) => {
+        //     const progress =
+        //       (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        //     console.log(progress);
+        //   },
+        //   (error) => setUploadError(error.message),
+        //   () => {
+        //     storage
+        //       .ref("product-images")
+        //       .child(image.name)
+        //       .getDownloadURL()
+        //       .then((url) => {
+        //         db.collection("Products")
+        //           .add({
+        //             title,
+        //             description,
+        //             price: Number(price),
+        //             url,
+        //           })
+        //           .then(() => {
+        //             setSuccessMsg("Product successfully added");
+        //             setTitle("");
+        //             setImageUrl('');
+        //             setDescription("");
+        //             setPrice("");
+        //             document.getElementById("file").value = "";
+        //             setImageError("");
+        //             setUploadError("");
+        //             setTimeout(() => {
+        //               setSuccessMsg("");
+        //             }, 3000);
+        //           })
+        //           .catch((error) => setUploadError(error.message));
+        //       });
+        //   }
+        // );
+        // setTimeout(() => history.push("/"), 500);
       } else{
          console.log("ImageUrl is ", imageUrl)
          let url = imageUrl; 
