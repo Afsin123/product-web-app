@@ -20,16 +20,16 @@ const ViewProduct = ({match}) => {
       console.log("No such document!");
   }
  
-    console.log(products);
+    
    
-    const details = products.find((products)=> products.id==match.params.id)
-  console.log("my data is", details)
+  //   const details = products.find((products)=> products.id==match.params.id)
+  // console.log("my data is", details)
   };
   useEffect(() => {
     getProducts();
   }, [id]);
 
-  
+  console.log(products);
   // {
   //   Object.keys(products).map((id, index) => {
   //     return (
@@ -71,7 +71,7 @@ const ViewProduct = ({match}) => {
           <img src={products.url}
               alt="product-img"  className="image-product"
                    /> 
-             <div> Test product </div>
+             
             <div > {products.title}  </div>
             <div className="product-id"> ID:  {id}  </div>
             <div> {products.description} </div>

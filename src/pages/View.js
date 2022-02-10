@@ -67,8 +67,8 @@ const View = ({match}) => {
       
   }, []);
         
-  const details = products.find((i)=> i.id==match.params.id)
-  console.log("my data is", details)
+  // const details = products.find((i)=> i.id==match.params.id)
+  // console.log("my data is", details)
 
   
   const onDelete = (id) => { 
@@ -90,12 +90,17 @@ const View = ({match}) => {
   }
   
   useEffect(() => {
-    if(products[id].ID !== id){
-      window.confirm("Product id not found!!! Add product")
-      navigate('/add') 
+    if(products.exist){
+      if(products[id]!==undefined)  {
+        if(products[id].ID !== id){
+          window.confirm("Product id not found!!! Add product")
+          navigate('/add') 
+        }
+      }
     }
     
-}, []);
+    
+}, [id]);
     // {
     //   db.child(`products/${id}`).delete((error) => {
     //     if (error) {

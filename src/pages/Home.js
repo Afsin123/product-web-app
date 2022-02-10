@@ -53,7 +53,7 @@ function Home() {
          <Row> 
                      
             <Products products={products} />
-            {/* console.log(products) */}
+          
                      </Row>
 
                      

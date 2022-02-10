@@ -24,7 +24,7 @@ function App() {
           <Route path="/update/:id" element={<AddProducts/>} />
           <Route path="/view" element={<View />} />
           <Route path="/viewproduct/:id" element={<ViewProduct />} />
-          <Route path="/about" element={<About/> } />
+          <Route path="/about" element={<About/> } /> 
         </Routes>
        
       </div>
