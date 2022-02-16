@@ -80,12 +80,13 @@ const View = ({match}) => {
       db.collection('Products').doc(products[id].ID).delete()
         .then(() => {
           console.log("Document deleted successfully");
-
+          
         }).catch((err) => {
           console.log("An error occured while deleting the document");
           console.log("Error: " + err.message);
       }) 
-    }
+    } this.forceUpdate(); 
+    // this.setState({ state: this.state });
     
   }
   
